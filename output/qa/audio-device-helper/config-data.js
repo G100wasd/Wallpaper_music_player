@@ -1,0 +1,1 @@
+window.BlackVinylDiskConfig = {"version":1,"settings":{"infoScale":1,"playerScale":1,"listScale":1,"playerStyle":"line","volume":0.65,"waveGain":1,"repeat":"all","waveMode":"stereo","audioDisplay":"waveform"},"playlists":[],"activePlaylistId":null,"trackId":null,"collapsed":{"all":false,"current":false,"saved":false}};

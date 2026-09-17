@@ -1,0 +1,27 @@
+{
+  "edge": {
+    "onlinePlayback": true,
+    "seekSeconds": 100,
+    "httpRange206": true,
+    "configurationDuringStreaming": true,
+    "audioFileCacheCreated": false
+  },
+  "wallpaperEngine": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+    "wallpaperHost": true,
+    "aac": "",
+    "events": [
+      "error"
+    ],
+    "time": 0,
+    "duration": null,
+    "error": {
+      "code": 4,
+      "message": "PipelineStatus::DEMUXER_ERROR_NO_SUPPORTED_STREAMS: FFmpegDemuxer: no supported streams"
+    },
+    "playError": {
+      "name": "NotSupportedError",
+      "message": "Failed to load because no supported source was found."
+    }
+  }
+}

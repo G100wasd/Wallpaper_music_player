@@ -1,0 +1,49 @@
+{
+    "version":  1,
+    "settings":  {
+                     "infoScale":  1,
+                     "playerScale":  1,
+                     "listScale":  1,
+                     "playerStyle":  "line",
+                     "volume":  0.65,
+                     "waveGain":  1,
+                     "repeat":  "one"
+                 },
+    "playlists":  [
+                      {
+                          "id":  "291c55ce-d605-4f95-a81b-22d4ef7c08ab",
+                          "name":  "loop",
+                          "tracks":  [
+                                         {
+                                             "id":  "4aa68277-28e9-4c6a-960b-2ecb925fcc72",
+                                             "title":  "测试：已编辑的标题",
+                                             "artist":  "列Leonardo",
+                                             "filename":  "",
+                                             "duration":  152,
+                                             "sourceType":  "bilibili",
+                                             "bvid":  "BV12vqGBqEgW",
+                                             "cid":  "34792474885",
+                                             "description":  "若你想回家，我便送你一程\n\n只是这场暴风雨，愈发汹涌了\n\nBGM：Гроза(暴风雨)——Сова",
+                                             "cover":  "https://i0.hdslb.com/bfs/archive/f2199be180e54437749214ebbd7fcb8ca7427cc6.jpg"
+                                         },
+                                         {
+                                             "id":  "020f7b48-763b-4472-8a3b-6d1a5d3c8a60",
+                                             "title":  "qa-tone-a",
+                                             "artist":  "",
+                                             "filename":  "qa-tone-a.wav",
+                                             "duration":  0,
+                                             "sourceType":  "url",
+                                             "src":  "music/b4093991d5c84517989d832ac440ffb7.wav"
+                                         }
+                                     ]
+                      }
+                  ],
+    "activePlaylistId":  "291c55ce-d605-4f95-a81b-22d4ef7c08ab",
+    "trackId":  "4aa68277-28e9-4c6a-960b-2ecb925fcc72",
+    "collapsed":  {
+                      "all":  false,
+                      "current":  false,
+                      "saved":  false
+                  },
+    "position":  0
+}

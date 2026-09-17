@@ -1,0 +1,20 @@
+{
+  "wallpaperHost": true,
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+  "steps": [
+    "No transcoding before play",
+    "OGG playback in actual wallpaper",
+    "Seek uses full song position",
+    "Pause stops transcoding",
+    "Resume continues at saved position",
+    "Next track starts from zero",
+    "End of stream repeats correctly"
+  ],
+  "finished": true,
+  "startMs": 1622,
+  "duration": 151.899,
+  "seekDisplay": "01:00",
+  "pausedAt": 60.803483,
+  "errors": [],
+  "passed": true
+}

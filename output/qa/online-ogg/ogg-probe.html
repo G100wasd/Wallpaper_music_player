@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>Black Vinyl OGG Test</title><style>body{background:#000;color:#fff;font:18px 'Microsoft YaHei';padding:32px;white-space:pre-wrap}</style><body>OGG 在线转码测试…<script>
+ (async()=>{
+ const endpoint="http://127.0.0.1:61793/05c9098b0f06237cead94ae18d3135d0a4b09ac78d8c1858/";
+ const a=new Audio();a.muted=true;
+ const report={userAgent:navigator.userAgent,wallpaperHost:typeof wallpaperRegisterAudioListener==='function',canPlay:a.canPlayType('audio/ogg; codecs="vorbis"'),events:[]};
+ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ for(const event of ['loadedmetadata','canplay','playing','waiting','pause','error'])a.addEventListener(event,()=>{report.events.push({event,time:a.currentTime});});
+ const bounded=promise=>Promise.race([promise,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Playback timeout')),30000))]);
+ try{
+  const start=performance.now();a.src=endpoint+'stream.ogg';await bounded(a.play());report.firstPlayMs=Math.round(performance.now()-start);
+  report.atFirstPlay=await(await fetch(endpoint+'status')).json();
+  await sleep(10000);report.playedSeconds=a.currentTime;report.decodedBytes=a.webkitAudioDecodedByteCount;
+  a.pause();const atPause=a.currentTime;await sleep(600);report.pauseHeld=Math.abs(a.currentTime-atPause)<.1;
+  await bounded(a.play());await sleep(1700);report.resumeAdvanced=a.currentTime>atPause+1;
+  a.pause();a.removeAttribute('src');a.load();
+  const seekStart=performance.now();a.src=endpoint+'stream.ogg?start=60';await bounded(a.play());report.restartAt60Ms=Math.round(performance.now()-seekStart);await sleep(4000);report.restartPlayedSeconds=a.currentTime;
+  report.error=a.error?{code:a.error.code,message:a.error.message}:null;
+ }catch(error){report.failure={name:error.name,message:error.message};report.error=a.error?{code:a.error.code,message:a.error.message}:null;}
+ a.pause();a.removeAttribute('src');a.load();
+ report.passed=report.playedSeconds>8&&report.pauseHeld&&report.resumeAdvanced&&report.restartPlayedSeconds>3&&!report.error&&!report.failure;
+ document.body.textContent=JSON.stringify(report,null,2);
+ await fetch(endpoint+'result',{method:'POST',body:JSON.stringify(report)});
+ })().catch(e=>document.body.textContent=e.stack);
+ </script>

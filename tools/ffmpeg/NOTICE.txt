@@ -1,0 +1,14 @@
+FFmpeg 7.1 essentials build (Gyan Doshi), used as a separate command-line program.
+Copyright (c) 2000-2024 the FFmpeg developers.
+License: GNU GPL version 3 or later. See COPYING.GPLv3.txt.
+SHA256: 2ce797a0f88d7f067180338fb227f7b1928ea727bd9a4d7a1d022f7c52af71a3
+
+Binary provenance: imageio-ffmpeg 0.6.0 Windows AMD64 wheel:
+https://pypi.org/project/imageio-ffmpeg/0.6.0/#files
+Original Windows builds: https://www.gyan.dev/ffmpeg/builds/
+FFmpeg source at this release: https://github.com/FFmpeg/FFmpeg/tree/n7.1
+Source archive: https://ffmpeg.org/releases/ffmpeg-7.1.tar.xz
+Build and binary provenance notes: https://github.com/imageio/imageio-ffmpeg/tree/v0.6.0
+External library/build information: https://www.gyan.dev/ffmpeg/builds/#libraries
+For the complete compiled configuration, run ffmpeg.exe -buildconf.
+FFmpeg is not installed globally or added to PATH by this wallpaper.

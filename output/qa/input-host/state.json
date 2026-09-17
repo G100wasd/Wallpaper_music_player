@@ -1,0 +1,58 @@
+{
+  "events": [
+    {
+      "type": "pointerdown",
+      "target": "current-page-next",
+      "trusted": true
+    },
+    {
+      "type": "mousedown",
+      "target": "current-page-next",
+      "trusted": true
+    },
+    {
+      "type": "mouseup",
+      "target": "current-page-next",
+      "trusted": true
+    },
+    {
+      "type": "click",
+      "target": "current-page-next",
+      "trusted": true
+    },
+    {
+      "type": "pointerdown",
+      "target": "open-config",
+      "trusted": true
+    },
+    {
+      "type": "mousedown",
+      "target": "open-config",
+      "trusted": true
+    },
+    {
+      "type": "mouseup",
+      "target": "open-config",
+      "trusted": true
+    },
+    {
+      "type": "click",
+      "target": "open-config",
+      "trusted": true
+    },
+    {
+      "type": "mouseup",
+      "target": "open-config",
+      "trusted": true
+    }
+  ],
+  "errors": [],
+  "opens": 1,
+  "hidden": false,
+  "host": true,
+  "paused": false,
+  "ready": "true",
+  "intro": "complete",
+  "current": "2 / 3",
+  "collapsed": "true"
+}

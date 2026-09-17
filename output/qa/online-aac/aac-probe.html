@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>Black Vinyl AAC Test</title><style>body{background:#000;color:#fff;font:20px 'Microsoft YaHei';padding:40px;white-space:pre-wrap}</style><body>AAC 在线播放测试…<script src="connection.js"></script><script>
+(async()=>{
+ const c=window.BlackVinylConnection;
+ const call=async(route,body)=>{const r=await fetch(c.url+route,{method:body?'POST':'GET',headers:{'X-BlackVinyl-Token':c.token},body:body?JSON.stringify(body):undefined});return r.json();};
+ const a=new Audio();a.muted=true;
+ const d={userAgent:navigator.userAgent,wallpaperHost:typeof wallpaperRegisterAudioListener==='function',aac:a.canPlayType('audio/mp4; codecs="mp4a.40.2"'),events:[]};
+ let done=false;
+ const finish=async()=>{if(done)return;done=true;d.time=a.currentTime;d.duration=Number.isFinite(a.duration)?a.duration:null;d.error=a.error?{code:a.error.code,message:a.error.message}:null;a.pause();document.body.textContent=JSON.stringify(d,null,2);const config=await call('config');config.aacDiagnostic=d;await call('config',config);};
+ for(const name of ['loadedmetadata','canplay','playing','error'])a.addEventListener(name,()=>{d.events.push(name);if(name==='error')finish();});
+ setTimeout(finish,25000);
+ try { const r=await call('bilibili/audio',{bvid:'BV12vqGBqEgW',cid:'34792474885'});if(!r.src)throw new Error(r.error);a.src=r.src;await a.play();setTimeout(finish,1800); }catch(e){d.playError={name:e.name,message:e.message};finish();}
+})().catch(e=>document.body.textContent=e.stack);
+</script>

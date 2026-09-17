@@ -1,0 +1,52 @@
+{
+    "version":  1,
+    "background":  {
+                       "color":  "#ffffff",
+                       "image":  "backgrounds/04961e023b914443914efd3b1189e43e.png",
+                       "x":  50,
+                       "y":  100,
+                       "scale":  1.25,
+                       "crop":  {
+                                    "x":  0,
+                                    "y":  0,
+                                    "width":  1,
+                                    "height":  0.5
+                                }
+                   },
+    "settings":  {
+                     "infoScale":  1,
+                     "playerScale":  1,
+                     "listScale":  1,
+                     "playerStyle":  "line",
+                     "volume":  0.65,
+                     "waveGain":  1,
+                     "waveMode":  "auto",
+                     "audioDisplay":  "volume",
+                     "repeat":  "all"
+                 },
+    "playlists":  [
+                      {
+                          "id":  "demo",
+                          "name":  "测试歌单",
+                          "tracks":  [
+                                         {
+                                             "id":  "track",
+                                             "title":  "歌曲名称",
+                                             "artist":  "歌手",
+                                             "filename":  "",
+                                             "duration":  152,
+                                             "sourceType":  "url",
+                                             "src":  "music/example.ogg"
+                                         }
+                                     ]
+                      }
+                  ],
+    "activePlaylistId":  "demo",
+    "trackId":  "track",
+    "collapsed":  {
+                      "all":  false,
+                      "current":  false,
+                      "saved":  false
+                  },
+    "position":  0
+}

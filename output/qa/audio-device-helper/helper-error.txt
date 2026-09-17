@@ -1,0 +1,7 @@
+System.Management.Automation.MethodInvocationException: Exception calling ".ctor" with "0" argument(s): "Operation is not supported on this platform." ---> System.PlatformNotSupportedException: Operation is not supported on this platform.
+   at System.Net.HttpListener..ctor()
+   --- End of inner exception stack trace ---
+   at System.Management.Automation.DotNetAdapter.AuxiliaryConstructorInvoke(MethodInformation methodInformation, Object[] arguments, Object[] originalArguments)
+   at System.Management.Automation.DotNetAdapter.ConstructorInvokeDotNet(Type type, ConstructorInfo[] constructors, Object[] arguments)
+   at Microsoft.PowerShell.Commands.NewObjectCommand.CallConstructor(Type type, ConstructorInfo[] constructors, Object[] args)
+at <ScriptBlock>, C:\Users\10041\Desktop\new\wallpaper\output\qa\audio-device-helper\Config-Helper.ps1: line 35

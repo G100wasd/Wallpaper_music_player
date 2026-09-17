@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "checks": [
+    "actual Wallpaper Engine callback to config page",
+    "config page to actual Wallpaper Engine callback",
+    "unsaved playlist preserved",
+    "stale save protects display",
+    "rapid changes last value wins"
+  ],
+  "events": [
+    {
+      "playerscale": {
+        "value": 115
+      }
+    },
+    {
+      "listscale": {
+        "value": 95
+      }
+    }
+  ]
+}

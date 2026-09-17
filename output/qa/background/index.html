@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>墨盘 · Black Vinyl</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='white'/%3E%3Ccircle cx='16' cy='16' r='3' fill='none' stroke='white'/%3E%3C/svg%3E">
+  <script src="engine/bridge.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="symbol-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M5 4v16M19 4 7 12l12 8Z"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M19 4v16M5 4l12 8-12 8Z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 3 14 9-14 9Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 4v16M16 4v16" stroke-width="3"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 4 5 9H2v6h3l6 5ZM15 8a6 6 0 0 1 0 8M18 4a11 11 0 0 1 0 16"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 4 5 9H2v6h3l6 5ZM16 8l6 8M22 8l-6 8"/></symbol>
+    <symbol id="i-left-triangle" viewBox="0 0 24 24"><path d="m16 5-10 7 10 7Z"/></symbol>
+    <symbol id="i-right-triangle" viewBox="0 0 24 24"><path d="m8 5 10 7-10 7Z"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m4 8 8 8 8-8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24"><path d="M21 8a9 9 0 0 0-16-3L2 8m0-6v6h6M3 16a9 9 0 0 0 16 3l3-3m0 6v-6h-6"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="m9 2-.7 3-2 .9L3.6 5 1.8 8.1l2.2 2v3.8l-2.2 2L3.6 19l2.7-.9 2 .9.7 3h6l.7-3 2-.9 2.7.9 1.8-3.1-2.2-2v-3.8l2.2-2L20.4 5l-2.7.9-2-.9-.7-3Z"/><circle cx="12" cy="12" r="3.5"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 10v8M9 4v16M14 8v12M19 12v5"/></symbol>
+  </defs></svg>
+
+  <main id="wallpaper" aria-label="音乐壁纸">
+    <section id="information" class="information region" aria-label="时间和声音信息">
+      <time id="clock">00:00:00</time>
+      <div id="date">—</div>
+      <div class="wave-frame"><canvas id="wave" aria-label="系统声音响应曲线"></canvas></div>
+      <div id="wave-status" role="status" hidden style="font-size:12px;color:#aaa;margin-top:6px">等待波形采样…</div>
+      <div class="fps">FPS <span id="fps-value">—</span></div>
+    </section>
+
+    <section id="player-region" class="player-region region" aria-label="音乐播放器">
+      <canvas id="turntable" width="920" height="920" aria-label="黑胶唱机"></canvas>
+      <div class="track-caption"><div id="track-title">尚未选择音乐</div><div id="track-artist">在配置中导入音乐</div></div>
+      <div class="progress"><input id="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="播放进度" disabled><div class="time-labels"><span id="current-time">00:00</span><span id="total-time">00:00</span></div></div>
+      <div class="transport">
+        <button id="previous" class="icon-button" aria-label="上一曲" title="上一曲" disabled><svg><use href="#i-prev"/></svg></button>
+        <button id="play-pause" class="icon-button play-button" aria-label="播放" title="播放" disabled><svg><use id="play-icon" href="#i-play"/></svg></button>
+        <button id="next" class="icon-button" aria-label="下一曲" title="下一曲" disabled><svg><use href="#i-next"/></svg></button>
+      </div>
+      <div class="volume-row"><button id="mute" class="icon-button" aria-label="静音" title="静音"><svg><use id="volume-icon" href="#i-volume"/></svg></button><input id="volume" type="range" min="0" max="100" step="1" value="65" aria-label="音量"><output id="volume-value">65%</output></div>
+    </section>
+
+    <section id="playlist-region" class="playlist-region region" aria-label="播放列表">
+      <button id="collapse-all" class="list-heading" aria-expanded="true" aria-controls="all-lists"><span>播放列表</span><svg class="chevron"><use href="#i-down"/></svg></button>
+      <div id="all-lists">
+        <section class="list-section">
+          <button id="collapse-current" class="section-heading" aria-expanded="true" aria-controls="current-pages"><span>当前播放列表</span><span id="current-count" class="list-count">00</span><svg class="chevron"><use href="#i-down"/></svg></button>
+          <div id="current-pages" class="paged-section">
+            <nav class="list-pagination" aria-label="当前歌曲翻页">
+              <button id="current-page-prev" class="page-button" aria-label="当前歌曲上一页" aria-controls="current-list" disabled><svg><use href="#i-left-triangle"/></svg></button>
+              <span id="current-page-number" class="page-number" role="status" aria-live="polite">0 / 0</span>
+              <button id="current-page-next" class="page-button" aria-label="当前歌曲下一页" aria-controls="current-list" disabled><svg><use href="#i-right-triangle"/></svg></button>
+            </nav>
+            <div id="current-list" class="paged-list" role="list" aria-label="当前歌曲"></div>
+          </div>
+        </section>
+        <section class="list-section saved-section">
+          <button id="collapse-saved" class="section-heading" aria-expanded="true" aria-controls="saved-pages"><span>保存播放列表</span><span id="saved-count" class="list-count">00</span><svg class="chevron"><use href="#i-down"/></svg></button>
+          <div id="saved-pages" class="paged-section">
+            <nav class="list-pagination" aria-label="已保存歌单翻页">
+              <button id="saved-page-prev" class="page-button" aria-label="已保存歌单上一页" aria-controls="saved-list" disabled><svg><use href="#i-left-triangle"/></svg></button>
+              <span id="saved-page-number" class="page-number" role="status" aria-live="polite">0 / 0</span>
+              <button id="saved-page-next" class="page-button" aria-label="已保存歌单下一页" aria-controls="saved-list" disabled><svg><use href="#i-right-triangle"/></svg></button>
+            </nav>
+            <div id="saved-list" class="paged-list" role="list" aria-label="已保存歌单"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <div id="utility" class="utility"><button id="open-config" class="outline-button"><svg><use href="#i-gear"/></svg><span>配置</span></button></div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="engine/config.js"></script>
+  <script src="engine/music-library.js"></script>
+  <script src="engine/music-player.js"></script>
+  <script src="engine/local-config.js"></script>
+  <script src="engine/turntable.js"></script>
+  <script src="engine/paged-list.js"></script>
+  <script src="engine/audio-wave.js"></script>
+  <script src="engine/background.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
