@@ -19,7 +19,7 @@
                      "listScale":  1,
                      "playerStyle":  "line",
                      "volume":  0.65,
-                     "waveGain":  2.47,
+                     "waveGain":  1,
                      "waveMode":  "auto",
                      "audioDisplay":  "volume",
                      "repeat":  "all"
