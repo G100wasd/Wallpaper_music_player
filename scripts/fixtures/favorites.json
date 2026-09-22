@@ -1,0 +1,12 @@
+{
+  "title": "测试歌单",
+  "fid": "1",
+  "total": 4,
+  "truncated": false,
+  "items": [
+    { "bvid": "BV0000000001", "cid": "1", "title": "测试视频一", "description": "BGM：测试歌曲一——测试乐队", "artist": "测试作者", "cover": "", "duration": 120, "available": true },
+    { "bvid": "BV0000000002", "cid": "2", "title": "测试视频二", "description": "歌曲名称：Example Two", "artist": "测试作者", "cover": "", "duration": 150, "available": true },
+    { "bvid": "BV0000000003", "cid": "3", "title": "「风格」示例 | Example Three | Example Artist", "description": "", "artist": "Example Artist", "cover": "", "duration": 180, "available": true },
+    { "bvid": "BV0000000004", "cid": "4", "title": "无歌曲标记的视频", "description": "合成测试数据", "artist": "测试作者", "cover": "", "duration": 210, "available": true }
+  ]
+}

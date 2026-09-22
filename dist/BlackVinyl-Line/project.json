@@ -20,58 +20,6 @@
         "text": "ui_browse_properties_scheme_color",
         "type": "color",
         "value": "0 0 0"
-      },
-      "infoscale": {
-        "editable": true,
-        "index": 0,
-        "order": 100,
-        "text": "右上信息区缩放 (%)",
-        "type": "slider",
-        "min": 50,
-        "max": 150,
-        "value": 100,
-        "step": 5,
-        "fraction": false,
-        "precision": 0
-      },
-      "playerscale": {
-        "editable": true,
-        "index": 1,
-        "order": 101,
-        "text": "中央播放器缩放 (%)",
-        "type": "slider",
-        "min": 50,
-        "max": 150,
-        "value": 100,
-        "step": 5,
-        "fraction": false,
-        "precision": 0
-      },
-      "listscale": {
-        "editable": true,
-        "index": 2,
-        "order": 102,
-        "text": "右下播放列表缩放 (%)",
-        "type": "slider",
-        "min": 50,
-        "max": 150,
-        "value": 100,
-        "step": 5,
-        "fraction": false,
-        "precision": 0
-      },
-      "wavegain": {
-        "editable": true,
-        "index": 4,
-        "order": 104,
-        "text": "声音曲线灵敏度 (%)",
-        "type": "slider",
-        "min": 50,
-        "max": 300,
-        "value": 100,
-        "step": 5,
-        "fraction": false,
-        "precision": 0
       }
     }
   }

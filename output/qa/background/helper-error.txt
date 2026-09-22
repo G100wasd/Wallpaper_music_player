@@ -1,7 +1,0 @@
-System.Management.Automation.MethodInvocationException: 使用“0”个参数调用“.ctor”时发生异常:“此平台上不支持操作。” ---> System.PlatformNotSupportedException: 此平台上不支持操作。
-   在 System.Net.HttpListener..ctor()
-   --- 内部异常堆栈跟踪的结尾 ---
-   在 System.Management.Automation.DotNetAdapter.AuxiliaryConstructorInvoke(MethodInformation methodInformation, Object[] arguments, Object[] originalArguments)
-   在 System.Management.Automation.DotNetAdapter.ConstructorInvokeDotNet(Type type, ConstructorInfo[] constructors, Object[] arguments)
-   在 Microsoft.PowerShell.Commands.NewObjectCommand.CallConstructor(Type type, ConstructorInfo[] constructors, Object[] args)
-在 <ScriptBlock>、C:\Users\10041\Desktop\new\wallpaper\output\qa\background\Config-Helper.ps1 中: 第 35 行

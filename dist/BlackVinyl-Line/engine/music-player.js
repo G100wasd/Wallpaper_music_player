@@ -2,6 +2,9 @@
   'use strict';
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const END_TOLERANCE = 1;
+  const STREAM_RECOVERY_LIMIT = 2;
+  const STREAM_RECOVERY_PROGRESS = 15;
 
   class MusicPlayer extends EventTarget {
     constructor(library) {
@@ -21,6 +24,8 @@
       this._resumeOnline = false;
       this._buffering = false;
       this._lastLoadFailed = false;
+      this._streamRecoveryAttempts = 0;
+      this._streamRecoveryPosition = 0;
       this._wantPlaying = false;
       this._destroyed = false;
       this._context = null;
@@ -64,6 +69,7 @@
       on('ended', () => { if (isCurrent()) this._handleEnded(); });
       on('error', () => {
         if (!isCurrent() || !audio.error) return;
+        if ([2, 3].includes(audio.error.code) && this._recoverOnlineStream()) return;
         this._wantPlaying = false;
         this._buffering = false;
         const messages = {
@@ -246,7 +252,7 @@
       return true;
     }
 
-    _select({ autoplay = false, startTime = 0 } = {}) {
+    _select({ autoplay = false, startTime = 0, recovering = false } = {}) {
       const token = ++this._loadToken;
       this._readyToken = -1;
       this._wantPlaying = autoplay;
@@ -254,6 +260,10 @@
       this._buffering = autoplay;
       this._lastLoadFailed = false;
       this._heldTime = Math.max(0, Number(startTime) || 0);
+      if (!recovering) {
+        this._streamRecoveryAttempts = 0;
+        this._streamRecoveryPosition = this._heldTime;
+      }
       this._pendingSeek = { token, time: Math.max(0, Number(startTime) || 0) };
       this._releaseSource();
       this._emitState();
@@ -404,7 +414,28 @@
       return this._select({ autoplay: true });
     }
 
+    _recoverOnlineStream() {
+      if (this._destroyed || !this._wantPlaying || !this._activeSource || !this._activeSource.online) return false;
+      const position = this._position();
+      // Permit a later, unrelated interruption to recover, but bound repeated failures.
+      if (position - this._streamRecoveryPosition >= STREAM_RECOVERY_PROGRESS) this._streamRecoveryAttempts = 0;
+      if (this._streamRecoveryAttempts >= STREAM_RECOVERY_LIMIT) {
+        this.pause();
+        this._emitError('在线音频连续中断，已保留当前歌曲和播放位置。请检查网络与本机助手，然后点击播放重试。');
+        return true;
+      }
+      this._streamRecoveryAttempts += 1;
+      this._streamRecoveryPosition = position;
+      this._select({ autoplay: true, startTime: position, recovering: true });
+      return true;
+    }
+
     _handleEnded() {
+      if (!this._wantPlaying || !this.audio.ended) return;
+      // A finished OGG response can be a truncated transcode, not the full song.
+      // Use the source's full duration and include the offset of a resumed stream.
+      const duration = this._duration();
+      if (duration > 0 && this._position() < duration - END_TOLERANCE && this._recoverOnlineStream()) return;
       this._wantPlaying = false;
       if (this.repeat === 'one') {
         this._select({ autoplay: true });

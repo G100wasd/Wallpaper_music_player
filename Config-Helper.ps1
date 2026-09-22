@@ -1,4 +1,4 @@
-﻿param([switch]$NoOpen, [switch]$QuietStartup, [string]$WallpaperLocation)
+﻿param([switch]$NoOpen, [switch]$QuietStartup)
 $ErrorActionPreference = 'Stop'
 $rootPath = [IO.Path]::GetFullPath($PSScriptRoot)
 $utf8 = New-Object Text.UTF8Encoding($false)
@@ -81,12 +81,10 @@ try {
       } elseif($route -eq '/display' -and $request.HttpMethod -eq 'GET'){
         $value=[IO.File]::ReadAllText($configPath,$utf8) | ConvertFrom-Json
         Reply $context 200 @{settings=(Read-Display $value)}
-      } elseif($route -in @('/display','/host-display') -and $request.HttpMethod -eq 'POST'){
+      } elseif($route -eq '/display' -and $request.HttpMethod -eq 'POST'){
         if($request.ContentLength64 -lt 0 -or $request.ContentLength64 -gt 4096){throw 'Invalid display request size'}
         $reader=New-Object IO.StreamReader($request.InputStream,$utf8);$patch=$reader.ReadToEnd() | ConvertFrom-Json
-        $settings=Update-Display $patch;$hostUpdated=$false
-        if($route -eq '/display'){$hostUpdated=Send-DisplayToWallpaper $patch}
-        Reply $context 200 @{settings=$settings;hostUpdated=$hostUpdated}
+        Reply $context 200 @{settings=(Update-Display $patch)}
       } elseif($route -eq '/config' -and $request.HttpMethod -eq 'GET'){
         Reply $context 200 ([IO.File]::ReadAllText($configPath,$utf8) | ConvertFrom-Json)
       } elseif($route -eq '/config' -and $request.HttpMethod -eq 'POST'){
@@ -96,7 +94,7 @@ try {
         $value.settings.playerStyle='line'
         # Display sliders are committed separately; a stale playlist draft must not overwrite them.
         $current=[IO.File]::ReadAllText($configPath,$utf8) | ConvertFrom-Json
-        foreach($key in $displayMap.Keys){$value.settings.$key=$current.settings.$key}
+        foreach($key in $displayKeys){$value.settings.$key=$current.settings.$key}
         Write-ConfigSnapshot $value
         Reply $context 200 @{ok=$true}
       } elseif($route -eq '/background' -and $request.HttpMethod -eq 'POST'){

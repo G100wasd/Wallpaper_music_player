@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict'),{spawn}=require('child_process'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const dir=path.resolve('output/qa/background');fs.mkdirSync(path.join(dir,'engine'),{recursive:true});
 for(const f of ['index.html','config.html','config-page.js','styles.css','background-editor.css','app.js','Config-Helper.ps1','config.default.json',...fs.readdirSync('engine').filter(f=>/\.(js|cs|ps1)$/.test(f)).map(f=>'engine/'+f)])fs.copyFileSync(f,path.join(dir,f));
 const defaults=JSON.parse(fs.readFileSync('config.default.json','utf8'));
@@ -49,7 +49,7 @@ fs.writeFileSync(path.join(dir,'config.json'),JSON.stringify(defaults));fs.write
   await page.locator('#save-config').click();await page.waitForFunction(()=>document.getElementById('config-message').textContent.includes('背景与配置已保存'));
   let saved=await(await request('config')).json();assert.match(saved.background.image,/^backgrounds\/[a-f0-9]{32}\.png$/);assert.equal(saved.background.y,100);assert.equal(saved.background.scale,1.25);assert.equal(saved.background.crop.height,.5);assert.equal(saved.background.color,'#ffffff');assert.ok(fs.existsSync(path.join(dir,saved.background.image+'.js')));
   await page.reload();await page.waitForFunction(()=>document.getElementById('config-message').textContent.includes('已连接'));await page.locator('#tab-background').click();await page.waitForFunction(()=>!document.getElementById('bg-pick').disabled);assert.equal(await page.locator('#bg-y').inputValue(),'100');
-  await page.locator('#bg-upload').setInputFiles('C:/Users/10041/Desktop/缪缪/壁纸/78434819E98906D020636DBF704FC6A7.jpg');await page.waitForFunction(()=>document.getElementById('bg-status').textContent.includes('图片已载入'));
+  await page.locator('#bg-upload').setInputFiles({name:'replacement.png',mimeType:'image/png',buffer:Buffer.from(data,'base64')});await page.waitForFunction(()=>document.getElementById('bg-status').textContent.includes('图片已载入'));
   await page.locator('#bg-y').fill('99');await page.locator('#bg-y').dispatchEvent('input');await page.locator('#bg-scale').fill('105');await page.locator('#bg-scale').dispatchEvent('input');
   await preview().waitForFunction(()=>document.querySelector('#turntable').dataset.intro==='complete');
   await page.screenshot({path:path.join(dir,'background-editor.png'),fullPage:true});

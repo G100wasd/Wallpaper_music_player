@@ -1,12 +1,12 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const fixture=path.resolve('output/qa/integrated-ogg');
 const scope={window:{}};vm.runInNewContext(fs.readFileSync(path.join(fixture,'connection.js'),'utf8'),scope);const c=scope.window.BlackVinylConnection;
 async function call(route,body){const r=await fetch(c.url+route,{method:body?'POST':'GET',headers:{'X-BlackVinyl-Token':c.token},body:body?JSON.stringify(body):undefined});const value=await r.json();assert.equal(r.status,200,JSON.stringify(value));return value;}
 async function idle(){for(let n=0;n<30;n++){if((await call('status')).activeTranscodes===0)return;await new Promise(r=>setTimeout(r,200));}throw Error('Transcoder did not stop');}
 (async()=>{
  assert.equal((await call('status')).transcoderAvailable,true);
- const item={bvid:'BV12vqGBqEgW',cid:'34792474885'};
+ const item=require('./runtime.cjs').testVideo();
  const source=await call('bilibili/audio',item);assert.equal(source.codec,'vorbis');assert.equal(source.mimeType,'audio/ogg');assert.ok(source.duration>150);
  const response=await fetch(source.src);assert.equal(response.status,200);assert.equal(response.headers.get('content-type'),'audio/ogg');
  const reader=response.body.getReader();const first=await reader.read();assert.equal(Buffer.from(first.value).subarray(0,4).toString(),'OggS');

@@ -1,5 +1,5 @@
 const fs = require('fs'), path = require('path'), assert = require('node:assert/strict');
-const { chromium } = require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const { chromium } = require('./runtime.cjs').dependency('playwright');
 (async () => {
   const output = path.resolve('output/qa/rotation'); fs.mkdirSync(output, { recursive: true });
   const browser = await chromium.launch({ executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true });

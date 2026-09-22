@@ -8,7 +8,7 @@ const connection=scope.window.BlackVinylConnection;
 const ffmpeg=path.join(dir,'tools/ffmpeg.exe');
 const token=crypto.randomBytes(24).toString('hex');
 const children=new Set(),records=[];
-const report={source:{bvid:'BV12vqGBqEgW',cid:'34792474885'},output:{container:'ogg',codec:'vorbis',quality:5},streams:records};
+const report={source:require('./runtime.cjs').testVideo(),output:{container:'ogg',codec:'vorbis',quality:5},streams:records};
 const save=()=>fs.writeFileSync(path.join(dir,'results.json'),JSON.stringify(report,null,2));
 let base;
 const server=http.createServer(async(req,res)=>{

@@ -1,1 +1,0 @@
-const original=wallpaperPropertyListener.applyUserProperties;wallpaperPropertyListener.applyUserProperties=function(p){fetch("http://127.0.0.1:61023",{method:'POST',body:JSON.stringify(p)});return original(p);};

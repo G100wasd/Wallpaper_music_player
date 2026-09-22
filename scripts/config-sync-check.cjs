@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const dir=path.resolve('output/qa/config-sync');fs.mkdirSync(path.join(dir,'engine'),{recursive:true});
 for(const f of ['index.html','styles.css','app.js',...fs.readdirSync('engine').filter(f=>f.endsWith('.js')).map(f=>'engine/'+f)])fs.copyFileSync(f,path.join(dir,f));
 const disk=JSON.parse(fs.readFileSync('config.default.json'));
@@ -38,7 +38,7 @@ const wav=Buffer.alloc(44+8000*120*2);wav.write('RIFF');wav.writeUInt32LE(wav.le
  // Keep a Bilibili resolve in flight while editing metadata; no duplicate resolver or cancellation.
  const online=await page.evaluate(async()=>{
    let complete,calls=0,cancels=0;const p=new MusicPlayer({resolveSource:()=>{calls++;return new Promise(r=>complete=r);}});
-   const track={id:'online',sourceType:'bilibili',bvid:'BV1E2ER6NEvN',cid:'123',duration:120,title:'Old'};
+   const track={id:'online',sourceType:'bilibili',bvid:'BV0000000001',cid:'123',duration:120,title:'Old'};
    p._ensureAudioGraph=()=>{};p.audio.play=async()=>{};
    const pending=p.setQueue([track],0,{autoplay:true,startTime:19});const token=p._loadToken;
    const retained=p.updateQueue([{...track,title:'New'}, {...track,id:'next'}]);

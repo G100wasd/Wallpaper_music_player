@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const dir=path.resolve('output/qa/pagination');for(const f of ['app.js','engine/bridge.js','engine/paged-list.js','engine/turntable.js'])fs.copyFileSync(f,path.join(dir,f));
 (async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});try{
 const page=await browser.newPage({viewport:{width:1600,height:900}}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>{Object.defineProperty(document,'hidden',{get:()=>true,configurable:true});window.wallpaperRegisterAudioListener=()=>{};});

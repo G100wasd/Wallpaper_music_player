@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  const displayKeys = ['infoScale', 'playerScale', 'listScale', 'waveGain'];
   const defaults = {
     version: 1,
     background: {color:'#000000', image:'', x:50, y:50, scale:1, crop:{x:0,y:0,width:1,height:1}},
@@ -68,5 +69,5 @@
     Object.keys(output.collapsed).forEach(key => output.collapsed[key] = Boolean(input.collapsed && input.collapsed[key]));
     return output;
   }
-  window.BlackVinylConfig = { defaults, clone, clamp, safeSource, normalize };
+  window.BlackVinylConfig = { defaults, displayKeys, clone, clamp, safeSource, normalize };
 })();

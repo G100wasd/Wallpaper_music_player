@@ -1,1 +1,0 @@
-window.BlackVinylConnection = {"token":"f5a7febb3ed0429ba7a52c1a2b3ae8a0384938a95c0f43aa8f24426c7c4d2af7","url":"http://localhost:18765/"};

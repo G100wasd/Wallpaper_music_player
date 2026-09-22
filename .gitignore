@@ -1,0 +1,14 @@
+# Per-machine configuration and personal media stay local.
+/config.json
+/config-data.js
+/config.previous.json
+/config.pending.json
+/connection.js
+/backgrounds/
+/music/
+/helper-error.txt
+
+# Generated previews, recordings, fixtures, and development dependencies.
+/output/
+/node_modules/
+/backups/

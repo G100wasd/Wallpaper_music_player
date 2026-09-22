@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const dir=path.resolve('output/qa/pagination');fs.mkdirSync(dir,{recursive:true});
 for(const file of ['index.html','styles.css','app.js',...fs.readdirSync('engine').filter(x=>x.endsWith('.js')).map(x=>'engine/'+x)]){fs.mkdirSync(path.dirname(path.join(dir,file)),{recursive:true});fs.copyFileSync(file,path.join(dir,file));}
 const disk=JSON.parse(fs.readFileSync('config.default.json'));disk.playlists=Array.from({length:12},(_,p)=>({id:'p'+p,name:'歌单 '+(p+1),tracks:Array.from({length:12},(_,t)=>({id:`p${p}t${t}`,title:`歌曲 ${t+1}`,artist:'分页验证',sourceType:'url',src:'tone.wav',duration:10}))}));disk.activePlaylistId='p0';disk.trackId='p0t0';

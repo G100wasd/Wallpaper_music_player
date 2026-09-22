@@ -19,7 +19,6 @@
   const foldStates = new Map(), foldAnimations = new Set();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) for (const animation of [...foldAnimations]) animation.finish(); });
-  const appliedProperties = new Map();
   let currentPages, savedPages;
   function toast(message) { $('toast').textContent = message; $('toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').hidden = true, 6500); }
   function persist(report = false) {
@@ -240,23 +239,8 @@
     if (!visualPaused) { updateClock(); clockTimer = setInterval(updateClock, 250); fpsAt = performance.now(); frameCount = 0; frame = requestAnimationFrame(animate); }
     else $('fps-value').textContent = '0';
   }
-  let hostDisplayTimer, hostDisplayPatch = {}, publishingDisplay = false;
-  async function publishHostDisplay() {
-    if (publishingDisplay || !Object.keys(hostDisplayPatch).length) return;
-    const patch = hostDisplayPatch; hostDisplayPatch = {}; publishingDisplay = true;
-    try { await LocalConfig.call('host-display','POST',JSON.stringify(patch)); }
-    catch (_) { hostDisplayPatch = { ...patch, ...hostDisplayPatch }; }
-    finally { publishingDisplay = false; if (Object.keys(hostDisplayPatch).length) hostDisplayTimer = setTimeout(publishHostDisplay, 2000); }
-  }
   function onHostUpdate(bridge) {
-    let changed = false;
-    const map = { infoscale: 'infoScale', playerscale: 'playerScale', listscale: 'listScale', wavegain: 'waveGain' };
-    Object.entries(bridge.properties).forEach(([key, property]) => {
-      if (!property || appliedProperties.get(key) === property.value) return;
-      appliedProperties.set(key, property.value);
-      if (map[key]) { const value = C.clamp(Number(property.value) / 100, .5, key === 'wavegain' ? 3 : 1.5, 1); config.settings[map[key]] = value; hostDisplayPatch[map[key]] = value; changed = true; }
-    });
-    if (changed) { applyAppearance(); persist(); clearTimeout(hostDisplayTimer); hostDisplayTimer = setTimeout(publishHostDisplay, 200); }
+    // Display settings belong to the configuration page, including after a host reload.
     renderer.setFps(bridge.fps);
     if (bridge.paused) { if (lastSnapshot && (lastSnapshot.playing || lastSnapshot.pendingPlay)) { hostWasPlaying = true; player.pause(); } }
     else if (hostWasPlaying) { hostWasPlaying = false; player.play(); }
@@ -267,7 +251,6 @@
     if(syncing)return;syncing=true;
     try { const disk=await LocalConfig.read(),signature=JSON.stringify(disk);if(signature===diskSignature)return;
       const next=C.normalize(disk),beforeActive=config.activePlaylistId;
-      if (publishingDisplay || Object.keys(hostDisplayPatch).length) return;
       // A saved editor draft may still point to the playlist/song selected when it opened.
       // Only a changed disk selection is an explicit request to switch playlists.
       const incomingActive=next.activePlaylistId;
@@ -299,9 +282,11 @@
     renderer.setPaused(WallpaperBridge.isWallpaper?WallpaperBridge.paused:document.hidden);
     applyAppearance();resizeWave();audioWave.draw(waveContext,waveW,waveH,0,1,false);
     layout();renderer.startIntro();
-    try { const disk = await LocalConfig.read(); diskSignature = JSON.stringify(disk); diskActivePlaylistId=C.normalize(disk).activePlaylistId;
+    try { const disk = await LocalConfig.read(), saved = C.normalize(disk); diskSignature = JSON.stringify(disk); diskActivePlaylistId=saved.activePlaylistId;
       let sameDisk=false;try{sameDisk=localStorage.getItem('black-vinyl.disk-signature')===diskSignature;localStorage.setItem('black-vinyl.disk-signature',diskSignature);}catch(_){}
-      if(!sameDisk)config = C.normalize(disk);
+      if(!sameDisk)config = saved;
+      // Keep local playback state, but replace even legacy cached panel values.
+      else for(const key of C.displayKeys)config.settings[key] = saved.settings[key];
     } catch (_) {}
     updateClock(); library = new MusicLibrary(); player = new MusicPlayer(library);
     player.addEventListener('state', onPlayerState); player.addEventListener('error', event => toast(event.detail.message));

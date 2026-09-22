@@ -1,11 +1,12 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 (async()=>{
+ const favoritesUrl=process.env.BLACKVINYL_TEST_FAVORITES_URL;if(!favoritesUrl)throw Error('Set BLACKVINYL_TEST_FAVORITES_URL to a public test collection with at least two available videos.');
  const fixture=path.resolve('output/qa/integrated-ogg'),scope={window:{}};vm.runInNewContext(fs.readFileSync(path.join(fixture,'connection.js'),'utf8'),scope);const c=scope.window.BlackVinylConnection;
  for(const file of ['index.html','config.html','app.js','config-page.js','styles.css',...fs.readdirSync('engine').filter(x=>x.endsWith('.js')).map(x=>'engine/'+x)])fs.copyFileSync(file,path.join(fixture,file));
  async function call(route,body){const r=await fetch(c.url+route,{method:body?'POST':'GET',headers:{'X-BlackVinyl-Token':c.token},body:body?JSON.stringify(body):undefined});const value=await r.json();assert.equal(r.status,200,JSON.stringify(value));return value;}
  await call('config',JSON.parse(fs.readFileSync('config.default.json','utf8')));
- const result=await call('bilibili/favorites',{url:'https://space.bilibili.com/488343677/favlist?fid=3842017177&ftype=create&ctype=21'});assert.ok(result.items.length>=22);assert.equal(result.title,'loop');
+ const result=await call('bilibili/favorites',{url:favoritesUrl});assert.ok(result.items.length>=2);assert.ok(result.title);
  const first=result.items.find(x=>x.available);assert.ok(first.title&&first.cover&&first.cid);
  console.log('PASS live public favorites: '+result.items.length+' videos');
  const audio=await call('bilibili/audio',{bvid:first.bvid,cid:first.cid});assert.equal(audio.online,true);assert.equal(audio.codec,'vorbis');assert.ok(!fs.existsSync(path.join(fixture,'music/bilibili-cache')));
@@ -21,7 +22,7 @@ const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-run
   await page.goto(pathToFileURL(path.resolve('config.html')).href);await page.waitForFunction(()=>document.querySelector('#config-message').textContent.includes('已连接'));
   assert.deepEqual(await page.locator('[data-tab]').allTextContents(),['歌单','导入','显示设置','配置备份']);
   assert.equal(await page.locator('#audio-files').isVisible(),false);
-  await page.locator('#tab-import').click();await page.locator('#import-bilibili').click();await page.locator('#bili-url').fill('https://space.bilibili.com/488343677/favlist?fid=3842017177');await page.locator('#parse-bili').click();await page.waitForFunction(()=>document.querySelectorAll('.bili-result').length>=22);
+  await page.locator('#tab-import').click();await page.locator('#import-bilibili').click();await page.locator('#bili-url').fill(favoritesUrl);await page.locator('#parse-bili').click();await page.waitForFunction(()=>document.querySelectorAll('.bili-result').length>=2);
   await page.waitForFunction(()=>[...document.querySelectorAll('.bili-result img')].slice(0,3).every(x=>x.complete&&x.naturalWidth>0));
   await page.screenshot({path:'output/qa/import-bilibili.png'});
   await page.locator('#bili-select-all').uncheck();assert.equal(await page.locator('#add-bili').isDisabled(),true);await page.locator('.bili-result input:not(:disabled)').first().check();await page.locator('#add-bili').click();await page.locator('#add-bili').click();

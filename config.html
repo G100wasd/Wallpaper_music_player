@@ -59,7 +59,7 @@
         </div>
       </section>
       <section id="panel-display" class="tab-panel" role="tabpanel" aria-labelledby="tab-display" hidden>
-        <p id="display-sync-status" class="import-hint" role="status">缩放和灵敏度自动保存并即时应用到壁纸。Wallpaper Engine 面板的改动会同步到这里；此页的改动不会反向刷新面板滑块。</p>
+        <p id="display-sync-status" class="import-hint" role="status">缩放和灵敏度仅在此处调整，自动保存后约 2 秒内应用到壁纸，重新启动后仍以这里保存的设置为准。</p>
         <div class="setting-row"><label for="setting-infoScale">右上信息区缩放</label><input id="setting-infoScale" data-setting="infoScale" type="range" min="50" max="150" step="1"><output></output></div>
         <div class="setting-row"><label for="setting-playerScale">中央播放器缩放</label><input id="setting-playerScale" data-setting="playerScale" type="range" min="50" max="150" step="1"><output></output></div>
         <div class="setting-row"><label for="setting-listScale">右下播放列表缩放</label><input id="setting-listScale" data-setting="listScale" type="range" min="50" max="150" step="1"><output></output></div>
@@ -69,7 +69,7 @@
         <div class="setting-row"><label for="setting-waveMode">声道布局</label><select id="setting-waveMode"><option value="auto">自动识别耳机</option><option value="single">单区域</option><option value="stereo">左右声道</option></select></div>
         <p id="audio-device-status" class="field-hint" role="status">正在识别输出设备…</p>
         <p class="field-hint">耳机模式在同一个方框内，左侧显示左声道，右侧显示右声道，不添加分隔线。此选项点击“保存到壁纸”后生效。自动模式跟随 Windows 默认输出设备；若识别不准，可手动选择左右声道。Wallpaper Engine 的音频录制设备仍需与输出设备一致。</p>
-        <p class="field-hint">横竖屏自动适配。空间不足时会限制尺寸，避免区域重叠。也可在 Wallpaper Engine 属性面板中调整。</p>
+        <p class="field-hint">横竖屏自动适配。空间不足时会限制尺寸，避免区域重叠。</p>
       </section>
       <section id="panel-background" class="tab-panel" role="tabpanel" aria-labelledby="tab-background" hidden></section>
       <section id="panel-backup" class="tab-panel" role="tabpanel" aria-labelledby="tab-backup" hidden>

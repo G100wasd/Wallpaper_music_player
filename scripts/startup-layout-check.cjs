@@ -1,5 +1,5 @@
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict'),{pathToFileURL}=require('url');
-const {chromium}=require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('./runtime.cjs').dependency('playwright');
 const dir=path.resolve('output/qa/startup-layout');fs.mkdirSync(path.join(dir,'engine'),{recursive:true});
 for(const f of ['index.html','styles.css',...fs.readdirSync('engine').filter(f=>f.endsWith('.js')).map(f=>'engine/'+f)])fs.copyFileSync(f,path.join(dir,f));
 fs.writeFileSync(path.join(dir,'app.js'),'setTimeout(()=>{\n'+fs.readFileSync('app.js','utf8')+'\n},800);');

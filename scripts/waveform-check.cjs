@@ -1,5 +1,5 @@
 const fs = require('fs'), path = require('path'), assert = require('node:assert/strict'), { pathToFileURL } = require('url');
-const { chromium } = require('C:/Users/10041/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const { chromium } = require('./runtime.cjs').dependency('playwright');
 const dir = path.resolve('output/qa/waveform'); fs.mkdirSync(dir, { recursive: true });
 for (const file of ['index.html', 'config.html', 'config-page.js', 'background-editor.css', 'styles.css', 'app.js', ...fs.readdirSync('engine').filter(f => f.endsWith('.js')).map(f => 'engine/' + f)]) {
   fs.mkdirSync(path.dirname(path.join(dir, file)), { recursive: true }); fs.copyFileSync(file, path.join(dir, file));

@@ -8,11 +8,11 @@ function message(text,error=false){$('config-message').textContent=text;$('confi
 function applyAppearance(){backgroundEditor.refresh();}
 let draft=C.normalize(C.defaults),config=draft,editId=null,draftImported=false;
 const backgroundEditor=new BackgroundEditor(()=>draft,message);
-const displayKeys=['infoScale','playerScale','listScale','waveGain'];
+const displayKeys=C.displayKeys;
 let displayPending={},displayTimer,displaySaving=null,displayPolling=false;
 function displayMessage(text,error=false){const node=$('display-sync-status');node.textContent=text;node.classList.toggle('error',error);}
 function mergeDisplay(settings){for(const key of displayKeys){if(Number.isFinite(settings[key])&&!Object.hasOwn(displayPending,key))draft.settings[key]=settings[key];}renderDisplaySettings();}
-function queueDisplay(key,value){displayPending[key]=value;clearTimeout(displayTimer);displayMessage('正在同步显示设置…');displayTimer=setTimeout(()=>flushDisplay().catch(()=>{}),250);}
+function queueDisplay(key,value){displayPending[key]=value;clearTimeout(displayTimer);displayMessage('正在保存显示设置…');displayTimer=setTimeout(()=>flushDisplay().catch(()=>{}),250);}
 async function flushDisplay(){
  clearTimeout(displayTimer);
  if(displaySaving){await displaySaving;if(Object.keys(displayPending).length)return flushDisplay();return;}
@@ -20,7 +20,7 @@ async function flushDisplay(){
  displaySaving=(async()=>{
   while(Object.keys(displayPending).length){
    const patch=displayPending;displayPending={};
-   try{const result=await LocalConfig.call('display','POST',JSON.stringify(patch));mergeDisplay(result.settings);displayMessage(result.hostUpdated?'显示设置已应用到壁纸。Wallpaper Engine 面板滑块不会反向更新。':'显示设置已保存；当前未找到正在运行的对应壁纸。');}
+   try{const result=await LocalConfig.call('display','POST',JSON.stringify(patch));mergeDisplay(result.settings);displayMessage('显示设置已保存，壁纸将在约 2 秒内更新。');}
    catch(e){displayPending={...patch,...displayPending};displayMessage('同步失败，请确认本机助手正在运行。'+e.message,true);throw e;}
   }
  })();
